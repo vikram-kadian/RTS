@@ -1,0 +1,240 @@
+
+public class MapData {
+  int Cat;
+  float Lat;
+  float Lon;
+  int Batt;
+  int ComStatus;
+  boolean SelectState;
+  
+  public MapData(int ty){
+    Cat = ty;
+    Lat = 0.0;
+    Lon = 0.0;
+    Batt = 0;
+    ComStatus = 0;
+    SelectState = false;
+  }
+  public void setType(int ty) {
+    Cat = ty;
+  }
+  public void setSelect(boolean st){
+    SelectState = st;
+  }
+  
+  public boolean getSelect(){
+    return SelectState;
+  }
+  
+  public void setLatitude(float lt){
+    Lat = lt;
+  }
+  
+  public void setLongitude(float ld){
+    Lon = ld;
+  }
+  
+  public void setBattery(int bt){
+    Batt = bt;
+  }
+  
+  public void setCommStatus(int st){
+    ComStatus = st;
+  }
+  
+  public float getLatitude(){
+    return Lat;
+  }
+  
+  public float getLongitude(){
+    return Lon;
+  }
+  
+  public int getType(){
+    return Cat;
+  }
+  
+  public int getBattery(){
+    return Batt;
+  }
+  
+  public int getCommStatus(){
+    return ComStatus;
+  } 
+  
+  public void Clear(){
+    Lat = 0.0;
+    Lon = 0.0;
+    Batt = 0;
+    ComStatus = 0;
+    SelectState = false;
+  }
+}
+
+
+void createButtons(){
+  fill(153,153,255);
+  stroke(153,153,255);
+  rect(0,0,width,40);
+  int x = 10;
+  cp5.addButton("CountDown Timer")
+       .setValue(128)
+       .setPosition(x,10)
+       .setSize(80,20)
+       ;
+  x += 90;
+  cp5.addButton("ARM")
+       .setValue(128)
+       .setPosition(x,10)
+       .setSize(80,20)
+       ;
+  x += 90;
+  cp5.addButton("Detonate")
+       .setValue(128)
+       .setPosition(x,10)
+       .setSize(80,20)
+       ;
+  x += 90;
+  cp5.addButton("Dis-ARM")
+       .setValue(128)
+       .setPosition(x,10)
+       .setSize(80,20)
+       ;
+}
+void createDataTable(){
+   createButtons();
+  //cp5 = new ControlP5(this);
+  int x2 = (30 + 20+60+1+60+35+21);
+  int x1 = width - x2;
+  int y1 = 25;
+  
+  int y2 = (31*21)+10;
+  fill(153,153,255);
+  stroke(153,153,255);
+  rect(x1,0,x2,y2);
+  PImage img,img1;
+  String name;
+  img = loadImage("home_b.png");
+  img1 = loadImage("tick.png");
+  
+  cp5.addTextlabel("label0")
+      .setText("ID")
+      .setPosition(x1+5,y1+3)
+      ;
+  cp5.addTextlabel("label1")
+      .setText("Latitude")
+      .setPosition(x1+45,y1+3)
+      ; 
+  cp5.addTextlabel("label2")
+      .setText("Longitude")
+      .setPosition(x1+105,y1+3)
+      ;   
+  cp5.addTextlabel("label3")
+      .setText("Batt")
+      .setPosition(x1+168,y1+3)
+      ;
+  cp5.addTextlabel("label4")
+      .setText("Com")
+      .setPosition(x1+205,y1+3)
+      ; 
+  for(int a = 1;a <= 25; a++) {
+    int y = ((a-1)*21 + y1+15);
+    name = str(a);
+    cp5.addButton(name)
+       .setValue(128)
+       .setPosition(x1+5,y)
+       .setSize(20,20)
+       ;
+    image(img,x1+25,y);
+    name = "Lon"+str(a);
+    cp5.addTextfield(name)
+     .setPosition(x1+45,y)
+     .setSize(60,20)
+     .setAutoClear(false)
+     .setCaptionLabel("");
+     ;
+    name = "Lat"+str(a);
+    cp5.addTextfield(name)
+     .setPosition(x1+105,y)
+     .setSize(60,20)
+     .setAutoClear(false)
+     .setCaptionLabel("");
+     ;
+    printBattery(x1+168,y,100);   
+    image(img1,x1+205,y);   
+  }
+  int pos = (26*21)+10 + y1;
+  x1 += 20;
+  cp5.addButton("Select All")
+       .setValue(128)
+       .setPosition(x1+10,pos)
+       .setSize(80,20)
+       ;
+  cp5.addButton("Clear All")
+       .setValue(128)
+       .setPosition(x1+10,pos+40)
+       .setSize(80,20)
+       ;
+  cp5.addButton("Clear Selected")
+       .setValue(128)
+       .setPosition(x1+100,pos)
+       .setSize(80,20)
+       ;
+   cp5.addButton("Check Health")
+       .setValue(128)
+       .setPosition(x1+100,pos+40)
+       .setSize(80,20)
+       ;
+   
+}
+
+void printBattery(int x, int y, int value)
+{
+  int battWidth = 30;
+  int battHeight = 18;
+  stroke(255,255,255);
+  fill(255,255,255);
+  rect(x,y,battWidth,battHeight,5);
+  rect(x+battWidth,y+6,4,6,4);
+  if(value < 10) {
+    fill(204,0,0);
+  }else if(value < 20) {
+    fill(255,128,0);
+  }else if(value < 40) {
+    fill(204,102,0);
+  }else if(value < 60) {
+    fill(102,204,0);
+  }else if(value < 80) {
+    fill(0,204,0);
+  }else {
+    fill(0,153,0);
+  }
+  rect(x+2,y+2,int(((battWidth-6)*value)/100)+2,battHeight-4);
+}
+
+void UpdateMapdata() {
+  fill(153,153,255);
+  stroke(153,153,255);
+  rect(0,0,width,40);
+  int x2 = (30 + 20+60+1+60+35+21);
+  int x1 = width - x2;
+  int y1 = 25;
+  int y2 = (31*21)+10;
+  rect(x1,0,x2,y2);
+  PImage img,img1;
+  String name;
+  for(int a = 0;a < 25; a++) {
+    int y = ((a)*21 + y1+15);
+    if(mpdt[a].getType() == 0)
+      img = loadImage("home_b.png");
+    else
+      img = loadImage("detonator_b.png");
+    image(img,x1+25,y);
+    printBattery(x1+168,y,mpdt[a].getBattery());
+    if(mpdt[a].getCommStatus() == 1)
+      img = loadImage("tick.png");
+    else
+      img = loadImage("cross.png");
+    image(img,x1+205,y);
+  }
+}
